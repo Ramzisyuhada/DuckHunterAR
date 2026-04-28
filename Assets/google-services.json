@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1040823591246",
+    "firebase_url": "https://findduck-a30f8-default-rtdb.firebaseio.com",
+    "project_id": "findduck-a30f8",
+    "storage_bucket": "findduck-a30f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040823591246:android:187d61d1c3af9fe53f3e1f",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.DuckHunterAR"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvZR95KlWUaBFB-Oq0fiNm0382cYT3AUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
