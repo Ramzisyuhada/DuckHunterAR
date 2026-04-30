@@ -6,13 +6,13 @@ using UnityEngine.XR.ARFoundation;
 public enum ModeGame
 {
     Tutorial,
-    PlayGame
+    PlayGame,
+    None
 }
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
-
     private List<GameObject> posisiSpawn;
 
     [Header("References")]
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int jumlahSpawnBebek = 7;
 
     public float jumlahMenangkap;
-    public ModeGame modegame;
+    public ModeGame modegame = ModeGame.None;
 
     public bool isTutorial = false; // false, state game masih memunculkan 30 bebek
                                     // true, state game ke tutorial, 3 bebek
@@ -102,10 +102,8 @@ public class GameManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(name))
         {
-            // Ambil input dari UI
             name = IntroScreen.Singleton.inputnama.text;
             Debug.Log(name);
-            // Simpan ke PlayerPrefs
             PlayerPrefs.SetString("Name", name);
             PlayerPrefs.Save();
         }
@@ -151,9 +149,8 @@ public class GameManager : MonoBehaviour
     {
         modegame = ModeGame.PlayGame;
         UIManager.Instance.Tutorial.SetActive(false);
-        GameObject[] spawnObjects = GameObject.FindGameObjectsWithTag("Spawn");
-       
 
+        GameObject[] spawnObjects = GameObject.FindGameObjectsWithTag("Spawn");
 
         if (spawnObjects.Length == 0)
         {
@@ -161,12 +158,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // Convert ke list
         posisiSpawn = new List<GameObject>(spawnObjects);
 
         int jumlahSpawn = Mathf.Min(jumlahSpawnBebek, posisiSpawn.Count);
         List<Vector3> posisifinal = new List<Vector3>();
 
-        // loopinhg untuk menentukan index + posisi
         for (int i = 0; i < jumlahSpawn; i++)
         {
             int randomIndex = Random.Range(0, posisiSpawn.Count);
@@ -174,18 +171,16 @@ public class GameManager : MonoBehaviour
             Vector3 pos = posisiSpawn[randomIndex].transform.position;
             pos.y = 0;
 
-            // masuk ke list final posisi
             posisifinal.Add(pos);
 
-            
+            // Hapus supaya tidak kepilih lagi
             posisiSpawn.RemoveAt(randomIndex);
         }
 
-        foreach(Vector3 pos in posisifinal)
+        foreach (Vector3 pos in posisifinal)
         {
             Instantiate(spawnDuck, pos, Quaternion.identity, parent);
         }
-
     }
 
 
