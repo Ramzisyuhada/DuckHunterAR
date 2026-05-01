@@ -5,13 +5,62 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+
     [Header("Refrences")]
 
     [SerializeField] private GameObject ValidasiTutorial;
-     public TMP_Text TF_Rank;
+
+    [SerializeField] private TMP_Text TF_Ammo;
+
+    [SerializeField] private RectTransform ParentTFAmmo;
+
+
+    public TMP_Text TF_Rank;
 
     public GameObject Tutorial;
     private CanvasGroup canvasGroup;
+
+    public void SetTextAmmo(float ammo)
+    {
+        TF_Ammo.text = ammo.ToString();
+    }
+
+    public void PlayEmptyAnimation()
+    {
+        ParentTFAmmo.DOKill();
+
+        ParentTFAmmo.DOShakeAnchorPos(0.5f, new Vector2(20, 0), 20, 90);
+
+        TF_Ammo.DOColor(Color.red, 0.2f)
+            .SetLoops(4, LoopType.Yoyo)
+            .OnComplete(() =>
+            {
+                TF_Ammo.color = Color.black;
+            });
+
+        ParentTFAmmo.DOScale(1.5f, 0.2f)
+            .SetLoops(2, LoopType.Yoyo)
+            .SetEase(Ease.InOutSine);
+    }
+
+
+
+    public void PlayDecreaseAnimation()
+    {
+        ParentTFAmmo.DOKill();
+
+        ParentTFAmmo.localScale = Vector3.one;
+
+        ParentTFAmmo
+            .DOScale(1.3f, 0.15f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                ParentTFAmmo.DOScale(1f, 0.1f);
+            });
+
+        ParentTFAmmo.DOPunchAnchorPos(new Vector2(10f, 0), 0.2f, 10, 1);
+    }
 
     public void SetRankTF(int value)
     {

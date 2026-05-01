@@ -48,15 +48,15 @@ public class PokemonBalls : MonoBehaviour
                 break;
 
             case ModeGame.PlayGame:
-                FireBase.instance.SavePlayerData(
-                    PlayerPrefs.GetString("Name"),
+                FireBase.instance.UpdateScore(
+                    PlayerPrefs.GetString("ID"),
                     GameManager.Singleton.jumlahMenangkap
                 );
                 if (!isListening)
                 {
                     isListening = true;
 
-                    FireBase.instance.GetTopScore(PlayerPrefs.GetString("Name"), (rank) =>
+                    FireBase.instance.GetTopScore(PlayerPrefs.GetString("ID"), (rank) =>
                     {
                         if (rank != -1)
                         {

@@ -25,6 +25,8 @@ public class Shoot : MonoBehaviour
     [SerializeField] private AudioClip[] swingSounds;
 
 
+    public int Ammo;
+
     private float lastShootTime;
     private Camera cam;
 
@@ -96,9 +98,17 @@ public class Shoot : MonoBehaviour
 
         DrawTrajectory(cam.transform.position, velocity);
     }
-
+    public void AddAmmo(int amount)
+    {
+        Ammo += amount;
+    }
     private bool CanShoot()
     {
+        if (Ammo <= 0) {
+            UIManager.Instance.PlayEmptyAnimation();
+            return false;
+        } 
+
         if (Time.time < lastShootTime + shootCooldown) return false;
 
         lastShootTime = Time.time;
@@ -115,7 +125,10 @@ public class Shoot : MonoBehaviour
 
     private void HandleSwipe(Vector2 start, Vector2 end)
     {
+
+
         if (!CanShoot()) return;
+        UIManager.Instance.PlayDecreaseAnimation();
 
         Vector2 swipe = end - start;
 
@@ -173,6 +186,8 @@ public class Shoot : MonoBehaviour
             return;
         }
 
+        Ammo -= 1;
+        UIManager.Instance.SetTextAmmo(Ammo);
         rb.linearVelocity = direction.normalized * power * shootForce;
     }
 }

@@ -126,8 +126,19 @@ public class FireBase : MonoBehaviour
             }
         });
     }
+    public void UpdateScore(string noTelepon, float score)
+    {
+        Dictionary<string, object> updates = new Dictionary<string, object>()
+    {
+        { "score", score }
+    };
 
-    public void SavePlayerData(string playerId, float score)
+        dbReference.Child("players").Child(noTelepon)
+            .UpdateChildrenAsync(updates);
+    }
+
+
+    public void SavePlayerData(string noTelepon, string nama, float score)
     {
         if (!isFirebaseReady || dbReference == null)
         {
@@ -135,8 +146,14 @@ public class FireBase : MonoBehaviour
             return;
         }
 
-        dbReference.Child("players").Child(playerId).Child("score")
-            .SetValueAsync(score)
+        Dictionary<string, object> data = new Dictionary<string, object>()
+    {
+        { "nama", nama },
+        { "score", score }
+    };
+
+        dbReference.Child("players").Child(noTelepon)
+            .SetValueAsync(data)
             .ContinueWithOnMainThread(task =>
             {
                 if (task.IsCompleted)

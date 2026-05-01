@@ -92,23 +92,10 @@ public class GameManager : MonoBehaviour
 
             case ModeGame.PlayGame:
                 MainGame();
-                ConfigurasiNama();
                 break;
         }
     }
 
-    private void ConfigurasiNama()
-    {
-        string name = PlayerPrefs.GetString("Name");
-
-        if (string.IsNullOrEmpty(name))
-        {
-            name = IntroScreen.Singleton.inputnama.text;
-            Debug.Log(name);
-            PlayerPrefs.SetString("Name", name);
-            PlayerPrefs.Save();
-        }
-    }
 
     public void Tutorial()
     {

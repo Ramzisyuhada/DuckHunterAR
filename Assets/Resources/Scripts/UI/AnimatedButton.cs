@@ -19,7 +19,7 @@ public class AnimatedButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     void Start()
     {
         InitScale(transform.localScale);
-      //  originalScale = transform.localScale;
+        originalScale = transform.localScale;
         audioSource = GetComponent<AudioSource>();
     }
     public void InitScale(Vector3 scale)
