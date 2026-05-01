@@ -8,9 +8,16 @@ public class UIManager : MonoBehaviour
     [Header("Refrences")]
 
     [SerializeField] private GameObject ValidasiTutorial;
+     public TMP_Text TF_Rank;
+
     public GameObject Tutorial;
     private CanvasGroup canvasGroup;
 
+    public void SetRankTF(int value)
+    {
+        Debug.Log("Kamu Rank " + value);
+        TF_Rank.text = value.ToString();
+    }
     private void Awake()
     {
         // Singleton setup
@@ -26,11 +33,21 @@ public class UIManager : MonoBehaviour
     }
 
 
-
+    private void Update()
+    {
+        
+    }
 
     void Start()
     {
-
+        FireBase.instance.GetTopScore(PlayerPrefs.GetString("Name"), (rank) =>
+        {
+            if (rank != -1)
+            {
+                UIManager.Instance.SetRankTF(rank);
+            }
+          
+        });
         // Ambil CanvasGroup
         canvasGroup = ValidasiTutorial.GetComponent<CanvasGroup>();
 

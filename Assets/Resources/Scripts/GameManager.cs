@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     public float jumlahMenangkap;
     public ModeGame modegame = ModeGame.None;
-
+    public DuckController Controller;
     public bool isTutorial = false; // false, state game masih memunculkan 30 bebek
                                     // true, state game ke tutorial, 3 bebek
     private void Awake()
@@ -45,9 +45,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
+        Controller = new DuckController(SQLiteConnect.Singleton.dbconnect);
         
 
+        
     }
 
     public void UbahEnumKeTutorial(bool _isTutorial)
@@ -150,6 +151,38 @@ public class GameManager : MonoBehaviour
         modegame = ModeGame.PlayGame;
         UIManager.Instance.Tutorial.SetActive(false);
 
+        // 🔥 Cleanup object lama
+        foreach (Transform child in parent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        var dbData = Controller.GetAllDataFull();
+
+        // =========================
+        // 🟢 LOAD DARI DATABASE
+        // =========================
+        if (dbData.Count > 0)
+        {
+            foreach (var data in dbData)
+            {
+                GameObject obj = Instantiate(
+                    spawnDuck,
+                    new Vector3(data.PosX, data.PosY, data.PosZ),
+                    Quaternion.identity,
+                    parent
+                );
+
+                // 🔥 SIMPAN ID DI NAMA
+                obj.name = data.Id.ToString();
+            }
+
+            return;
+        }
+
+        // =========================
+        // 🔵 GENERATE BARU
+        // =========================
         GameObject[] spawnObjects = GameObject.FindGameObjectsWithTag("Spawn");
 
         if (spawnObjects.Length == 0)
@@ -158,11 +191,9 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Convert ke list
-        posisiSpawn = new List<GameObject>(spawnObjects);
+        List<GameObject> posisiSpawn = new List<GameObject>(spawnObjects);
 
         int jumlahSpawn = Mathf.Min(jumlahSpawnBebek, posisiSpawn.Count);
-        List<Vector3> posisifinal = new List<Vector3>();
 
         for (int i = 0; i < jumlahSpawn; i++)
         {
@@ -171,15 +202,21 @@ public class GameManager : MonoBehaviour
             Vector3 pos = posisiSpawn[randomIndex].transform.position;
             pos.y = 0;
 
-            posisifinal.Add(pos);
-
-            // Hapus supaya tidak kepilih lagi
             posisiSpawn.RemoveAt(randomIndex);
-        }
 
-        foreach (Vector3 pos in posisifinal)
-        {
-            Instantiate(spawnDuck, pos, Quaternion.identity, parent);
+            GameObject obj = Instantiate(spawnDuck, pos, Quaternion.identity, parent);
+
+            DuckData duckdata = new DuckData
+            {
+                NamaBebek = "Duck", // bebas
+                PosX = pos.x,
+                PosY = pos.y,
+                PosZ = pos.z
+            };
+
+            Controller.InsertDuck(duckdata);
+
+            obj.name = duckdata.Id.ToString();
         }
     }
 

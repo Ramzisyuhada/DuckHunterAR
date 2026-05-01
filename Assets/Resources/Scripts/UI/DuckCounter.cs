@@ -31,7 +31,10 @@ public class DuckCounter : MonoBehaviour
 
     public void OnCountDuck(float count)
     {
+
+        GameManager.Singleton.jumlahMenangkap = count;
         // 🔥 Format biar rapi (tanpa .0)
+        Debug.Log( "Jumlah Nangkap Bebek"+ count);
         CountDuck.text = count.ToString("0");
     }
 
@@ -63,7 +66,6 @@ public class DuckCounter : MonoBehaviour
 
         FireBase.instance.GetPlayerData(playerId, (score) =>
         {
-            Debug.Log("Score diterima: " + score);
             OnCountDuck(score);
         });
     }
