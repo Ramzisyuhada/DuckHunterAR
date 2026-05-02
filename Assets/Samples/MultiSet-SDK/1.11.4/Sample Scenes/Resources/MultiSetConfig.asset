@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 823483932, guid: 5e2b4f19fefec46a08626f272dff56e8, type: 3}
   m_Name: MultiSetConfig
   m_EditorClassIdentifier: 
-  clientId: 3d1cd2d7-f443-4739-8cf4-b8c6e0af0537
-  clientSecret: 73a416f4366dd118486911cdc5d34a96284f26a24c5639e1f1c110a219c70861
+  clientId: cd137513-4a4b-488b-b352-471ad69ca6a4
+  clientSecret: 195778479039bd20d6ed81e10ebe70bf7e1613f47de7e476e1bcea520624e57c

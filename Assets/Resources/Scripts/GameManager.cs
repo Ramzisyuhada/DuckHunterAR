@@ -146,9 +146,6 @@ public class GameManager : MonoBehaviour
 
         var dbData = Controller.GetAllDataFull();
 
-        // =========================
-        // 🟢 LOAD DARI DATABASE
-        // =========================
         if (dbData.Count > 0)
         {
             foreach (var data in dbData)
@@ -187,7 +184,6 @@ public class GameManager : MonoBehaviour
             int randomIndex = Random.Range(0, posisiSpawn.Count);
 
             Vector3 pos = posisiSpawn[randomIndex].transform.position;
-            pos.y = 0;
 
             posisiSpawn.RemoveAt(randomIndex);
 

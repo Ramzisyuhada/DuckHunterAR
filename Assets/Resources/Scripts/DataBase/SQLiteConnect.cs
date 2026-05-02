@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SQLiteConnect : MonoBehaviour
 {
@@ -17,14 +17,10 @@ public class SQLiteConnect : MonoBehaviour
 
         Singleton = this;
         DontDestroyOnLoad(gameObject);
-    }
 
-
-    void Start()
-    {
+        // 🔥 PINDAH KE SINI
         dbconnect = new DBConnection();
         dbconnect.Connection();
-        
     }
 
     private void OnApplicationQuit()
