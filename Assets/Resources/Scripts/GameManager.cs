@@ -187,14 +187,19 @@ public class GameManager : MonoBehaviour
 
             posisiSpawn.RemoveAt(randomIndex);
 
-            GameObject obj = Instantiate(spawnDuck, pos, Quaternion.identity, parent);
+            float Scale = Random.Range(0.5f, 1f);
 
+            GameObject obj = Instantiate(spawnDuck, pos, Quaternion.identity, parent);
+            obj.transform.localScale = new Vector3(Scale, Scale, Scale);
             DuckData duckdata = new DuckData
             {
                 NamaBebek = "Duck", // bebas
                 PosX = pos.x,
                 PosY = pos.y,
-                PosZ = pos.z
+                PosZ = pos.z,
+                ScaleX = Scale,
+                ScaleY = Scale,
+                ScaleZ = Scale,
             };
 
             Controller.InsertDuck(duckdata);

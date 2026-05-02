@@ -2,6 +2,8 @@
 
 public class Shoot : MonoBehaviour
 {
+
+    public static Shoot Singleton;
     [Header("References")]
     [SerializeField] private InputManager manager;
     [SerializeField] private GameObject PrefabNet;
@@ -57,7 +59,17 @@ public class Shoot : MonoBehaviour
         manager.OnSlingshot -= HandleSlingshot;
         manager.OnSlingshotDrag -= PreviewSlingshot;
     }
+    private void Awake()
+    {
+        if (Singleton != null && Singleton != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
+        Singleton = this;
+        DontDestroyOnLoad(gameObject);
+    }
     void DrawTrajectory(Vector3 startPos, Vector3 velocity)
     {
         if (line == null) return;

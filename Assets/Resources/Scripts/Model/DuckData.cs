@@ -11,5 +11,10 @@ public class DuckData
     public float PosY { get; set; }
     public float PosZ { get; set; }
 
+    public float ScaleX { get; set; }
+
+    public float ScaleY { get; set; }
+
+    public float ScaleZ { get; set; }
    
 }

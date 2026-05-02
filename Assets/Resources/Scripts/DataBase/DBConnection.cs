@@ -11,7 +11,7 @@ public class DBConnection
         string dbPath = Path.Combine(Application.persistentDataPath, "MyDb.db");
 
         db = new SQLiteConnection(dbPath);
-
+        
         db.CreateTable<DuckData>();
     }
 

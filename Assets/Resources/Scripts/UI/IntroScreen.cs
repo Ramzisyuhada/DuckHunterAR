@@ -261,29 +261,33 @@ public class IntroScreen : MonoBehaviour
            });
     }
 
-    // Button submit -> hubungkan ke function ini
+    
+
     public void OnInputDataUser()
     {
-        string nama = inputnama != null ? inputnama.text : "";
-        string no = inputTelepon != null ? inputTelepon.text : "";
-        string email = inputemail != null ? inputemail.text : "";
+        string nama = inputnama != null ? inputnama.text.Trim() : "";
+        string no = inputTelepon != null ? inputTelepon.text.Trim() : "";
+        string email = inputemail != null ? inputemail.text.Trim() : "";
 
         bool isValid = true;
 
         ResetColor();
 
+        
         if (string.IsNullOrEmpty(nama))
         {
             SetError(TF_Nama, namaTransform);
             isValid = false;
         }
 
+        
         if (string.IsNullOrEmpty(no) || !Regex.IsMatch(no, @"^\d+$"))
         {
             SetError(TF_No, noTransform);
             isValid = false;
         }
 
+        
         if (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, emailPattern))
         {
             SetError(TF_Email, emailTransform);
@@ -292,33 +296,43 @@ public class IntroScreen : MonoBehaviour
 
         if (!isValid)
         {
-            Debug.Log("❌ Data belum valid");
-            return;
+           return;
         }
 
-        Debug.Log("✅ Valid");
-
-        index = 2;
-
-        if (index == 2)
+        string namaFix = nama.ToLower();
+        FireBase.instance.CheckNamaExist(namaFix, (isExist) =>
         {
-            TFNama.text = nama;
-
-            // ✅ FIX DI SINI
-            if (string.IsNullOrEmpty(PlayerPrefs.GetString("ID")))
+            if (isExist)
             {
-                PlayerPrefs.SetString("ID", no);
-                PlayerPrefs.Save();
+                TF_Nama.text = "Nama sudah digunakan!";
+                SetError(TF_Nama, namaTransform);
+                return;
             }
 
-            // ✅ FIX DI SINI
-            FireBase.instance.SavePlayerData(no, nama, 0f);
+            
+            
+            index = 2;
 
-            HideParentDataUser(() =>
+            if (index == 2)
             {
-                StartMainSequence();
-            });
-        }
+                TFNama.text = nama;
+
+                
+                if (string.IsNullOrEmpty(PlayerPrefs.GetString("ID")))
+                {
+                    PlayerPrefs.SetString("ID", no);
+                    PlayerPrefs.Save();
+                }
+
+                
+                FireBase.instance.SavePlayerData(no, nama, email, 0f);
+
+                HideParentDataUser(() =>
+                {
+                    StartMainSequence();
+                });
+            }
+        });
     }
 
     void ResetColor()

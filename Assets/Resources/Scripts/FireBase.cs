@@ -138,7 +138,7 @@ public class FireBase : MonoBehaviour
     }
 
 
-    public void SavePlayerData(string noTelepon, string nama, float score)
+    public void SavePlayerData(string noTelepon, string nama, string email,float score)
     {
         if (!isFirebaseReady || dbReference == null)
         {
@@ -149,7 +149,8 @@ public class FireBase : MonoBehaviour
         Dictionary<string, object> data = new Dictionary<string, object>()
     {
         { "nama", nama },
-        { "score", score }
+        { "score", score },
+            { "email",email}
     };
 
         dbReference.Child("players").Child(noTelepon)
@@ -203,6 +204,35 @@ public class FireBase : MonoBehaviour
                 else
                 {
                     Debug.LogError("Gagal ambil data: " + task.Exception);
+                }
+            });
+    }
+
+    public void CheckNamaExist(string nama, System.Action<bool> callback)
+    {
+        dbReference.Child("players")
+            .OrderByChild("nama")
+            .EqualTo(nama)
+            .GetValueAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    if (task.Result.Exists)
+                    {
+                        Debug.Log("Nama sudah ada!");
+                        callback?.Invoke(true);
+                    }
+                    else
+                    {
+                        Debug.Log("Nama belum ada");
+                        callback?.Invoke(false);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Error cek nama: " + task.Exception);
+                    callback?.Invoke(false);
                 }
             });
     }
